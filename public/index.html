@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<style>
+		* {
+			padding: 0;
+			margin: 0;
+		}
+	</style>
+</head>
+
+<body>
+	<script src='pixi.min.js'></script>
+	<script>
+		let app = new PIXI.Application({ width: window.innerWidth, height: window.innerHeight });
+		document.body.appendChild(app.view);
+
+		let img = new PIXI.Sprite.from('pikachu.jpg');
+		img.width = window.innerWidth;
+		img.height = window.innerHeight;
+		app.stage.addChild(img);
+
+		let deptmap = new PIXI.Sprite.from('pikachu-depthmap.png');
+		deptmap.width = window.innerWidth;
+		deptmap.height = window.innerHeight;
+		app.stage.addChild(deptmap);
+
+		let displacementFilter = new PIXI.filters.DisplacementFilter(deptmap)
+		app.stage.filters = [displacementFilter]
+
+		document.getElementsByTagName('canvas')[0].onmousemove = function (e) {
+			let scaleX, scaleY
+			scaleX = (window.innerWidth / 2 - e.clientX)/30;
+			scaleY = (window.innerHeight / 2 - e.clientY)/30;
+			displacementFilter.scale.x = scaleX;
+			displacementFilter.scale.y = scaleY;
+		}
+	</script>
+</body>
+
+</html>
